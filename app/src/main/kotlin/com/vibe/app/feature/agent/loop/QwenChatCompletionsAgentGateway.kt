@@ -42,10 +42,15 @@ class QwenChatCompletionsAgentGateway @Inject constructor(
 
     override suspend fun streamTurn(request: AgentModelRequest): Flow<AgentModelEvent> = flow {
         openAIAPI.setToken(request.platform.token)
+        val isCompleteEndpoint = request.platform.compatibleType == ClientType.OPENROUTER ||
+            request.platform.compatibleType == ClientType.OPENAI_COMPATIBLE
         openAIAPI.setAPIUrl(
-            request.platform.apiUrl.toQwenChatCompletionsBaseUrl(),
-            isCompleteEndpoint = request.platform.compatibleType == ClientType.OPENROUTER ||
-                request.platform.compatibleType == ClientType.OPENAI_COMPATIBLE,
+            url = if (isCompleteEndpoint) {
+                request.platform.apiUrl
+            } else {
+                request.platform.apiUrl.toQwenChatCompletionsBaseUrl()
+            },
+            isCompleteEndpoint = isCompleteEndpoint,
         )
         val trace = ModelExecutionTrace()
         val effectiveToolChoice = request.toQwenToolChoice()

@@ -49,7 +49,6 @@
     <string name="invalid_api_url">אנא הזן כתובת אתר חוקית.</string>
     <string name="model_name">שם מודל</string>
     <string name="reset">איפוס</string>
-    <string name="api_url_cautions">כתובת ה-URL חייבת להסתיים ב-\'/\'.</string>
     <string name="bug_report">דוח באגים</string>
     <string name="bug_report_description">משהו לא עובד כמו שצריך?</string>
     <string name="bug_report_icon">סמל דיווח באג</string>

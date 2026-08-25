@@ -65,7 +65,6 @@
     <string name="invalid_api_url">Insira um URL válido.</string>
     <string name="model_name">Nome do modelo</string>
     <string name="reset">Reiniciar</string>
-    <string name="api_url_cautions">A URL deve terminar com \'/\'.</string>
     <string name="bug_report">Relatório de erro</string>
     <string name="bug_report_description">Algo não funciona corretamente?</string>
     <string name="bug_report_icon">Ícone de relatório de bug</string>

@@ -66,7 +66,6 @@
     <string name="invalid_api_url">유효한 주소를 입력해 주세요.</string>
     <string name="reset">초기화</string>
     <string name="model_name">모델 식별자</string>
-    <string name="api_url_cautions">URL이 \'/\'로 끝나야 합니다.</string>
     <string name="bug_report">버그 제보</string>
     <string name="bug_report_description">정상적으로 작동되지 않는 부분이 있어요.</string>
     <string name="bug_report_icon">버그 제보 아이콘</string>
