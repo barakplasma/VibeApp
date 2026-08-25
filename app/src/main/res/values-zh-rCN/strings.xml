@@ -71,7 +71,6 @@
     <string name="invalid_api_url">请输入一个有效的网址</string>
     <string name="model_name">模型标识符</string>
     <string name="reset">重置</string>
-    <string name="api_url_cautions">网址的结尾必须有一个\"/\"</string>
     <string name="bug_report">错误报告</string>
     <string name="bug_report_description">有什么无法工作了吗？</string>
     <string name="bug_report_icon">错误报告的图标</string>

@@ -22,6 +22,8 @@ fun getThemeModeTitle(theme: ThemeMode) = when (theme) {
 
 fun getClientTypeDisplayName(clientType: ClientType): String = when (clientType) {
     ClientType.OPENAI -> "OpenAI"
+    ClientType.OPENROUTER -> "OpenRouter"
+    ClientType.OPENAI_COMPATIBLE -> "OpenAI Compatible"
     ClientType.ANTHROPIC -> "Anthropic"
     ClientType.QWEN -> "Qwen"
     ClientType.KIMI -> "Kimi"

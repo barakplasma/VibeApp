@@ -72,7 +72,6 @@
     <string name="invalid_api_url">Lütfen geçerli bir URL girin.</string>
     <string name="model_name">Model Adı</string>
     <string name="reset">Sıfırla</string>
-    <string name="api_url_cautions">URL bir ‘/’ ile bitmelidir.</string>
     <string name="bug_report">Hata Raporu</string>
     <string name="bug_report_description">Bir şey doğru çalışmıyor mu?</string>
     <string name="bug_report_icon">Hata Raporu Simgesi</string>

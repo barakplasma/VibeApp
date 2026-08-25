@@ -72,7 +72,6 @@
     <string name="about">Tentang</string>
     <string name="model_name">Nama Model</string>
     <string name="reset">Atur Ulang</string>
-    <string name="api_url_cautions">Tautan harus diakhiri dengan \'/\'.</string>
     <string name="bug_report">Laporan Bug</string>
     <string name="bug_report_description">Ada masalah?</string>
     <string name="bug_report_icon">Ikon Laporan Bug</string>

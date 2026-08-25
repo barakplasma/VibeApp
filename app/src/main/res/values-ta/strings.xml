@@ -66,7 +66,6 @@
     <string name="invalid_api_url">செல்லுபடியாகும் முகவரி ஐ உள்ளிடவும்.</string>
     <string name="model_name">மாதிரி பெயர்</string>
     <string name="reset">மீட்டமை</string>
-    <string name="api_url_cautions">முகவரி ஒரு \'/\' உடன் முடிவடைய வேண்டும்.</string>
     <string name="bug_report">பிழை அறிக்கை</string>
     <string name="bug_report_description">ஏதோ சரியாக வேலை செய்யவில்லையா?</string>
     <string name="bug_report_icon">பிழை அறிக்கை படவுரு</string>

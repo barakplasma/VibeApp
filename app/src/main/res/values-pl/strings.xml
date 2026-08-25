@@ -61,7 +61,6 @@
     <string name="export_chat">Eksportuj rozmowę</string>
     <string name="license_icon">Symbol licencji</string>
     <string name="version_icon">Symbol wersji</string>
-    <string name="api_url_cautions">Adres musi kończyć się ukośnikiem \'/\'.</string>
     <string name="temperature_setting_description">Temperatura to poziom losowości w odpowiedzi modelu\n Zazwyczaj domyslnie 1.0 - niższa oznacza bardziej zdecydowane i jednoznaczne odpowiedzi, z kolei wyższa - bardziej przypadkowe i różnorodne.</string>
     <string name="feedback_icon">Symbol feedbacku</string>
     <string name="top_p_setting_description">Próbkowanie jądrowe (Nucleus Sampling) polega na obliczaniu skumulowanego rozkładu prawdopodobieństw dla każdego kolejnego tokena z malejącym prawdopodobieństwem, dopóki osiągnie poziom określony przez tę wartość. \nDla większości modeli zaleca się zmianę albo Nucleus Sampling, albo temperatury - ale nie obu.</string>

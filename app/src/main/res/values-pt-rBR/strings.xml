@@ -48,7 +48,6 @@
     <string name="url_icon">Ícone de URL</string>
     <string name="invalid_api_url">Insira um URL válido.</string>
     <string name="model_name">Nome do modelo</string>
-    <string name="api_url_cautions">A URL deve terminar com \'/\'.</string>
     <string name="bug_report_icon">Ícone de relatório de bug</string>
     <string name="app_name">VibeApp</string>
     <string name="openai_description">Criador do ChatGPT.</string>

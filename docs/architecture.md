@@ -82,6 +82,10 @@ Local state            signed.apk
 - `QwenChatCompletionsAgentGateway`
 - `AgentToolRegistry`
 
+OpenRouter and generic OpenAI-compatible providers use the Chat Completions gateway. Generic
+providers store a complete endpoint URL, so custom paths are sent exactly as configured rather
+than having `/v1/chat/completions` appended automatically.
+
 职责：
 
 - 根据当前模型路由到不同 provider 协议

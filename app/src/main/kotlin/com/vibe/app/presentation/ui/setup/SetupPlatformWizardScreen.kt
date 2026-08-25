@@ -535,6 +535,8 @@ private fun WizardNavigationButtons(
 
 private fun getApiHelpUrl(clientType: ClientType): String? = when (clientType) {
     ClientType.OPENAI -> "https://platform.openai.com/account/api-keys"
+    ClientType.OPENROUTER -> "https://openrouter.ai/settings/keys"
+    ClientType.OPENAI_COMPATIBLE -> null
     ClientType.ANTHROPIC -> "https://console.anthropic.com/settings/keys"
     ClientType.QWEN -> "https://bailian.console.aliyun.com/cn-beijing/?tab=api#/api"
     ClientType.KIMI -> "https://platform.moonshot.cn/console/api-keys"

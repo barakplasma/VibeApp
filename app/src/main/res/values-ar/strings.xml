@@ -71,7 +71,6 @@
     <string name="url_icon">أيقونة URL</string>
     <string name="invalid_api_url">الرجاء إدخال عنوان URL صالح.</string>
     <string name="reset">إعادة تعيين</string>
-    <string name="api_url_cautions">يجب أن ينتهي عنوان URL بـ \'/\'.</string>
     <string name="bug_report">الإبلاغ عن خطأ</string>
     <string name="bug_report_description">شيء ما لا يعمل بشكل صحيح؟</string>
     <string name="bug_report_icon">أيقونة الإبلاغ عن خطأ</string>

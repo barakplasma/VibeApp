@@ -236,7 +236,7 @@ private fun APIUrlDialog(
         onDismissRequest = onDismissRequest,
         confirmButton = {
             TextButton(
-                enabled = apiUrl.isNotBlank() && apiUrl.isValidUrl() && apiUrl.endsWith("/"),
+                enabled = apiUrl.isNotBlank() && apiUrl.isValidUrl(),
                 onClick = { onConfirmRequest(apiUrl) }
             ) {
                 Text(stringResource(R.string.confirm))

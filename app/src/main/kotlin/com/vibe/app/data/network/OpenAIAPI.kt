@@ -12,7 +12,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface OpenAIAPI {
     fun setToken(token: String?)
-    fun setAPIUrl(url: String)
+    fun setAPIUrl(url: String, isCompleteEndpoint: Boolean = false)
     fun streamChatCompletion(
         request: ChatCompletionRequest,
         diagnosticContext: ModelRequestDiagnosticContext? = null,

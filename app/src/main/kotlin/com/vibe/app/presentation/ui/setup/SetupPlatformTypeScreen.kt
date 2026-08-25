@@ -46,6 +46,16 @@ private val platformTypes = listOf(
         descriptionResId = R.string.openai_description
     ),
     PlatformTypeInfo(
+        clientType = ClientType.OPENROUTER,
+        titleResId = R.string.openrouter,
+        descriptionResId = R.string.openrouter_description
+    ),
+    PlatformTypeInfo(
+        clientType = ClientType.OPENAI_COMPATIBLE,
+        titleResId = R.string.openai_compatible,
+        descriptionResId = R.string.openai_compatible_description
+    ),
+    PlatformTypeInfo(
         clientType = ClientType.ANTHROPIC,
         titleResId = R.string.anthropic,
         descriptionResId = R.string.anthropic_description

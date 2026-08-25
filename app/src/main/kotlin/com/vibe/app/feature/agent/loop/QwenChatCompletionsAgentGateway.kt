@@ -7,6 +7,7 @@ import com.vibe.app.data.dto.qwen.request.QwenFunctionDefinition
 import com.vibe.app.data.dto.qwen.request.QwenTool
 import com.vibe.app.data.dto.qwen.request.QwenToolCall
 import com.vibe.app.data.dto.qwen.request.qwenTextContent
+import com.vibe.app.data.model.ClientType
 import com.vibe.app.data.network.OpenAIAPI
 import com.vibe.app.feature.agent.AgentMessageRole
 import com.vibe.app.feature.agent.AgentModelEvent
@@ -41,7 +42,16 @@ class QwenChatCompletionsAgentGateway @Inject constructor(
 
     override suspend fun streamTurn(request: AgentModelRequest): Flow<AgentModelEvent> = flow {
         openAIAPI.setToken(request.platform.token)
-        openAIAPI.setAPIUrl(request.platform.apiUrl.toQwenChatCompletionsBaseUrl())
+        val isCompleteEndpoint = request.platform.compatibleType == ClientType.OPENROUTER ||
+            request.platform.compatibleType == ClientType.OPENAI_COMPATIBLE
+        openAIAPI.setAPIUrl(
+            url = if (isCompleteEndpoint) {
+                request.platform.apiUrl
+            } else {
+                request.platform.apiUrl.toQwenChatCompletionsBaseUrl()
+            },
+            isCompleteEndpoint = isCompleteEndpoint,
+        )
         val trace = ModelExecutionTrace()
         val effectiveToolChoice = request.toQwenToolChoice()
 

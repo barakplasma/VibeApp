@@ -65,7 +65,6 @@
     <string name="invalid_api_url">有効なURLを入力してください.</string>
     <string name="model_name">モデル名</string>
     <string name="reset">リセット</string>
-    <string name="api_url_cautions">Url は \'/\' で終わる必要があります.</string>
     <string name="bug_report">バグ報告</string>
     <string name="bug_report_description">なにかうまく動かないですか？</string>
     <string name="bug_report_icon">バグ報告アイコン</string>
