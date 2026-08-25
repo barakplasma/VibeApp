@@ -181,6 +181,8 @@ class SetupViewModelV2 @Inject constructor(
 
     private fun getDefaultPlatformName(clientType: ClientType): String = when (clientType) {
         ClientType.OPENAI -> "OpenAI"
+        ClientType.OPENROUTER -> "OpenRouter"
+        ClientType.OPENAI_COMPATIBLE -> "OpenAI Compatible"
         ClientType.ANTHROPIC -> "Anthropic"
         ClientType.QWEN -> "Qwen"
         ClientType.KIMI -> "Kimi"
@@ -190,6 +192,8 @@ class SetupViewModelV2 @Inject constructor(
 
     private fun getDefaultApiUrl(clientType: ClientType): String = when (clientType) {
         ClientType.OPENAI -> ModelConstants.OPENAI_API_URL
+        ClientType.OPENROUTER -> ModelConstants.OPENROUTER_API_URL
+        ClientType.OPENAI_COMPATIBLE -> ModelConstants.OPENAI_COMPATIBLE_API_URL
         ClientType.ANTHROPIC -> ModelConstants.ANTHROPIC_API_URL
         ClientType.QWEN -> ModelConstants.QWEN_API_URL
         ClientType.KIMI -> ModelConstants.KIMI_API_URL
@@ -199,6 +203,8 @@ class SetupViewModelV2 @Inject constructor(
 
     private fun getDefaultModel(clientType: ClientType): String = when (clientType) {
         ClientType.OPENAI -> "gpt-5.4"
+        ClientType.OPENROUTER -> "openrouter/auto"
+        ClientType.OPENAI_COMPATIBLE -> "your-model-name"
         ClientType.ANTHROPIC -> "claude-sonnet-4-6"
         ClientType.QWEN -> "qwen3-max"
         ClientType.KIMI -> "kimi-k2.5"

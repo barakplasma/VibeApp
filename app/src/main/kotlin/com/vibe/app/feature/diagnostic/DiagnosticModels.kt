@@ -243,6 +243,8 @@ fun createDiagnosticEventId(timestamp: Long = System.currentTimeMillis()): Strin
 
 fun ClientType.toDiagnosticProviderType(): String = when (this) {
     ClientType.OPENAI -> "openai"
+    ClientType.OPENROUTER -> "openrouter"
+    ClientType.OPENAI_COMPATIBLE -> "openai_compatible"
     ClientType.ANTHROPIC -> "anthropic"
     ClientType.QWEN -> "qwen"
     ClientType.KIMI -> "kimi"

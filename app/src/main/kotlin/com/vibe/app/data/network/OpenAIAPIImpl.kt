@@ -37,13 +37,15 @@ class OpenAIAPIImpl @Inject constructor(
 
     private var token: String? = null
     private var apiUrl: String = ModelConstants.OPENAI_API_URL
+    private var isCompleteEndpoint: Boolean = false
 
     override fun setToken(token: String?) {
         this.token = token
     }
 
-    override fun setAPIUrl(url: String) {
+    override fun setAPIUrl(url: String, isCompleteEndpoint: Boolean) {
         this.apiUrl = url
+        this.isCompleteEndpoint = isCompleteEndpoint
     }
 
     override fun streamQwenChatCompletion(
@@ -51,7 +53,7 @@ class OpenAIAPIImpl @Inject constructor(
         diagnosticContext: ModelRequestDiagnosticContext?,
         trace: ModelExecutionTrace?,
     ): Flow<ChatCompletionChunk> = flow {
-        val endpoint = if (apiUrl.endsWith("/")) "${apiUrl}v1/chat/completions" else "$apiUrl/v1/chat/completions"
+        val endpoint = apiUrl.toChatCompletionsEndpoint(isCompleteEndpoint)
         val requestBody = NetworkClient.json.encodeToJsonElement(request).toString()
         val requestStartedAt = System.currentTimeMillis()
         trace?.markRequestStarted(requestStartedAt)
@@ -140,7 +142,7 @@ class OpenAIAPIImpl @Inject constructor(
         diagnosticContext: ModelRequestDiagnosticContext?,
         trace: ModelExecutionTrace?,
     ): QwenChatCompletionResponse {
-        val endpoint = if (apiUrl.endsWith("/")) "${apiUrl}v1/chat/completions" else "$apiUrl/v1/chat/completions"
+        val endpoint = apiUrl.toChatCompletionsEndpoint(isCompleteEndpoint)
         val requestBody = NetworkClient.json.encodeToJsonElement(request).toString()
         val requestStartedAt = System.currentTimeMillis()
         trace?.markRequestStarted(requestStartedAt)
@@ -260,7 +262,7 @@ class OpenAIAPIImpl @Inject constructor(
         diagnosticContext: ModelRequestDiagnosticContext?,
         trace: ModelExecutionTrace?,
     ): Flow<ChatCompletionChunk> = flow {
-        val endpoint = if (apiUrl.endsWith("/")) "${apiUrl}v1/chat/completions" else "$apiUrl/v1/chat/completions"
+        val endpoint = apiUrl.toChatCompletionsEndpoint(isCompleteEndpoint)
         val requestBody = NetworkClient.openAIJson.encodeToJsonElement(request).toString()
         val requestStartedAt = System.currentTimeMillis()
         trace?.markRequestStarted(requestStartedAt)
@@ -550,6 +552,22 @@ class OpenAIAPIImpl @Inject constructor(
         }
 
         return false
+    }
+}
+
+/**
+ * Accepts either the historical provider base URL or a complete Chat Completions endpoint.
+ * Complete URLs are preserved byte-for-byte (apart from surrounding whitespace), allowing
+ * OpenAI-compatible servers to use custom paths instead of being forced under `/v1`.
+ */
+internal fun String.toChatCompletionsEndpoint(isCompleteEndpoint: Boolean = false): String {
+    val configuredUrl = trim()
+    if (isCompleteEndpoint) return configuredUrl
+    val path = configuredUrl.substringBefore('?').substringBefore('#').trimEnd('/')
+    return if (path.endsWith("/chat/completions")) {
+        configuredUrl
+    } else {
+        "${configuredUrl.trimEnd('/')}/v1/chat/completions"
     }
 }
 

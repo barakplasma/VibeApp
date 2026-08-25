@@ -79,7 +79,7 @@
     <string name="invalid_api_url">Please enter a valid URL.</string>
     <string name="model_name">Model Identifier</string>
     <string name="reset">Reset</string>
-    <string name="api_url_cautions">The url must end with a \'/\'.</string>
+    <string name="api_url_cautions">Enter a provider base URL or the complete chat completions endpoint URL.</string>
     <string name="bug_report">Bug Report</string>
     <string name="bug_report_description">Something isn\'t working correctly?</string>
     <string name="bug_report_icon">Bug Report Icon</string>
@@ -177,6 +177,10 @@
     <string name="back">Back</string>
     <string name="finish">Finish</string>
     <string name="alibaba" translatable="false">Alibaba</string>
+    <string name="openrouter" translatable="false">OpenRouter</string>
+    <string name="openrouter_description">Access models from multiple providers through OpenRouter.</string>
+    <string name="openai_compatible">OpenAI Compatible</string>
+    <string name="openai_compatible_description">Connect to an OpenAI-compatible chat completions endpoint using its complete URL.</string>
     <string name="qwen_description">Creator of Qwen.</string>
     <string name="kimi" translatable="false">Kimi</string>
     <string name="kimi_description">Creator of Kimi, by Moonshot AI.</string>

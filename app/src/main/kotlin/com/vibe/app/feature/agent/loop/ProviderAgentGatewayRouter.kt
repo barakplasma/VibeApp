@@ -18,6 +18,8 @@ import kotlinx.coroutines.flow.Flow
  * - [ClientType.QWEN]      → [QwenChatCompletionsAgentGateway]
  * - [ClientType.KIMI]      → [KimiChatCompletionsAgentGateway]
  * - [ClientType.OPENAI]    → [OpenAiResponsesAgentGateway]
+ * - [ClientType.OPENROUTER] → [QwenChatCompletionsAgentGateway] (OpenAI-compatible API)
+ * - [ClientType.OPENAI_COMPATIBLE] → [QwenChatCompletionsAgentGateway]
  *
  * New providers can be added here without touching the coordinator or DI graph.
  */
@@ -37,6 +39,8 @@ class ProviderAgentGatewayRouter @Inject constructor(
             ClientType.QWEN -> qwenGateway.streamTurn(request)
             ClientType.KIMI -> kimiGateway.streamTurn(request)
             ClientType.OPENAI -> openAiGateway.streamTurn(request)
+            ClientType.OPENROUTER -> qwenGateway.streamTurn(request)
+            ClientType.OPENAI_COMPATIBLE -> qwenGateway.streamTurn(request)
             ClientType.DEEPSEEK -> deepSeekGateway.streamTurn(request)
         }
     }

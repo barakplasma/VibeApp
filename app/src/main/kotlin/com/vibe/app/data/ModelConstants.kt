@@ -3,6 +3,8 @@ package com.vibe.app.data
 object ModelConstants {
 
     const val OPENAI_API_URL = "https://api.openai.com/"
+    const val OPENROUTER_API_URL = "https://openrouter.ai/api/v1/chat/completions"
+    const val OPENAI_COMPATIBLE_API_URL = "http://localhost:11434/v1/chat/completions"
     const val ANTHROPIC_API_URL = "https://api.anthropic.com/"
 
     const val QWEN_API_URL = "https://dashscope.aliyuncs.com/compatible-mode/"
