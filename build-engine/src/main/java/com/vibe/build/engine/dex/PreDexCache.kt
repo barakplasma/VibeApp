@@ -9,6 +9,7 @@ import com.android.tools.r8.Diagnostic
 import com.android.tools.r8.DiagnosticsHandler
 import com.android.tools.r8.OutputMode
 import com.tyron.builder.BuildModule
+import com.vibe.build.engine.internal.BundledLibraries
 import java.io.File
 import java.security.MessageDigest
 import java.util.zip.ZipEntry
@@ -26,9 +27,9 @@ object PreDexCache {
 
     private const val TAG = "PreDexCache"
     private const val CACHE_DIR_NAME = "predex-cache"
-    // Bump when the pre-dex pipeline changes (e.g. R-class stripping added
-    // in v2) to invalidate stale caches on device.
-    private const val CACHE_VERSION = 3
+    // Bump when the pre-dex pipeline changes (e.g. R-class stripping added in v2,
+    // catalog-driven library list in v4) to invalidate stale caches on device.
+    private const val CACHE_VERSION = 4
 
     data class CachedDexFiles(
         val dexFiles: List<File>,
@@ -42,11 +43,7 @@ object PreDexCache {
         val cacheDir = File(context.filesDir, CACHE_DIR_NAME)
         cacheDir.mkdirs()
 
-        val jarsToPreDex = buildList {
-            BuildModule.getAndroidxClassesJar()?.takeIf { it.exists() }?.let { add(it) }
-            BuildModule.getShadowRuntimeJar()?.takeIf { it.exists() }?.let { add(it) }
-            BuildModule.getJsoupJar()?.takeIf { it.exists() }?.let { add(it) }
-        }
+        val jarsToPreDex = BundledLibraries.resolvedJars()
 
         if (jarsToPreDex.isEmpty()) {
             return CachedDexFiles(emptyList())
@@ -104,11 +101,7 @@ object PreDexCache {
         val dexOutputDir = File(cacheDir, "dex")
         if (!hashFile.exists() || !dexOutputDir.exists()) return false
 
-        val jars = buildList {
-            BuildModule.getAndroidxClassesJar()?.takeIf { it.exists() }?.let { add(it) }
-            BuildModule.getShadowRuntimeJar()?.takeIf { it.exists() }?.let { add(it) }
-            BuildModule.getJsoupJar()?.takeIf { it.exists() }?.let { add(it) }
-        }
+        val jars = BundledLibraries.resolvedJars()
         if (jars.isEmpty()) return false
 
         return hashFile.readText() == computeCombinedHash(jars) &&

@@ -74,10 +74,7 @@ class BuildWorkspaceTest {
             signedApk = stub,
             bootstrapJar = stub,
             lambdaStubsJar = stub,
-            androidxClassesJar = null,
-            androidxResCompiledDir = null,
-            shadowRuntimeJar = null,
-            jsoupJar = null,
+            libraries = emptyList(),
         )
     }
 }

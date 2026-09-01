@@ -61,9 +61,7 @@ class D8DexConverter(
             // Library JARs go on classpath (for type resolution) instead of program files
             val classpathFiles = buildList {
                 addAll(input.classpathEntries.map(::File).filter { it.exists() }.map { it.toPath() })
-                workspace.androidxClassesJar?.let { add(it.toPath()) }
-                workspace.shadowRuntimeJar?.let { add(it.toPath()) }
-                workspace.jsoupJar?.let { add(it.toPath()) }
+                addAll(workspace.libraryJars().map { it.toPath() })
             }
 
             val command = D8Command.builder(diagnosticsHandler)
@@ -100,15 +98,7 @@ class D8DexConverter(
             // Fallback: DEX everything together (original behavior)
             Log.d(tag, "No pre-dex cache, DEXing all files together")
             val programFiles = classFiles.map { it.toPath() }.toMutableList()
-            if (workspace.androidxClassesJar != null) {
-                programFiles.add(workspace.androidxClassesJar.toPath())
-            }
-            if (workspace.shadowRuntimeJar != null) {
-                programFiles.add(workspace.shadowRuntimeJar.toPath())
-            }
-            if (workspace.jsoupJar != null) {
-                programFiles.add(workspace.jsoupJar.toPath())
-            }
+            programFiles.addAll(workspace.libraryJars().map { it.toPath() })
 
             val command = D8Command.builder(diagnosticsHandler)
                 .addProgramFiles(programFiles)
