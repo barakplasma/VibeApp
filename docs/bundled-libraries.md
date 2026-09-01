@@ -56,7 +56,7 @@ ships a subset of the catalog.
 
 ### Adding a library
 
-1. Add its coordinates to a bundle in `build-engine/bundled-libs.gradle.kts`.
+1. Add its coordinates to a bundle in `gradle/bundled-libs.gradle.kts`.
 2. Run `./gradlew :build-engine:generateBundledLibraryAssets` (needs network and, for
    shrunk bundles, `ANDROID_HOME`). Commit the regenerated asset.
 3. Add the matching `BundledLibrary` row to `BundledLibraries.ALL`.
@@ -66,6 +66,11 @@ ships a subset of the catalog.
 
 The generation task is deliberately **not** wired into `assembleDebug`: it needs the
 network and its outputs are committed binaries.
+
+It also lives in `gradle/` rather than beside `build-engine/build.gradle.kts`. Any extra
+`.gradle.kts` inside an Android module's directory crashes lint's build-script visitor
+(`findFirCompiledSymbol only works on compiled declarations`) and fails
+`:build-engine:lintAnalyzeDebug`. Keep new build scripts out of module directories.
 
 ## Kotlin: a runtime dependency, not a source language
 

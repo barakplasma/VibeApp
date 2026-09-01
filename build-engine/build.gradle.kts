@@ -58,4 +58,4 @@ dependencies {
 }
 
 // Dev-time regeneration of src/main/assets bundled library jars (manually invoked).
-apply(from = "bundled-libs.gradle.kts")
+apply(from = rootProject.file("gradle/bundled-libs.gradle.kts"))
