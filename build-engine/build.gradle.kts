@@ -56,3 +56,6 @@ dependencies {
     implementation(project(":build-tools:logging"))
     implementation("com.android.tools.build:apksig:9.1.0")
 }
+
+// Dev-time regeneration of src/main/assets bundled library jars (manually invoked).
+apply(from = "bundled-libs.gradle.kts")

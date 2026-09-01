@@ -100,7 +100,11 @@ class Aapt2ResourceCompiler(
         }
         // --extra-packages generates an R class per library package so library code can
         // resolve its own R.drawable / R.style / R.attr references at runtime.
-        val extraPackages = workspace.libraries.flatMap { it.extraPackages }
+        // Only for libraries whose overlays actually loaded: an R class for a package with
+        // no resources is at best useless, and the extraction may have been skipped.
+        val extraPackages = workspace.libraries
+            .filter { it.resCompiledDir != null }
+            .flatMap { it.extraPackages }
         if (extraPackages.isNotEmpty()) {
             linkArgs += listOf("--extra-packages", extraPackages.joinToString(":"))
         }

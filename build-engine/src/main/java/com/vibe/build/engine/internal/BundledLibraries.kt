@@ -91,6 +91,11 @@ object BundledLibraries {
             id = "jsoup",
             classesAsset = "jsoup.jar.zip",
         ),
+        // Retrofit + Moshi (+ OkHttp, Okio) for typesafe HTTP and JSON mapping.
+        BundledLibrary(
+            id = "retrofit",
+            classesAsset = "retrofit.jar.zip",
+        ),
     )
 
     /**

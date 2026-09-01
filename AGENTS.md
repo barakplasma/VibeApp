@@ -9,6 +9,7 @@ If this summary conflicts with the codebase, follow these files first:
 - `app/build.gradle.kts` and `build-engine/build.gradle.kts` for SDK / Java config
 - `docs/architecture.md` for module boundaries and runtime flow
 - `docs/build-engine.md` and `docs/build-chain.md` for the real on-device build pipeline
+- `docs/bundled-libraries.md` for which libraries generated apps may use, and how to add one
 - `CONTRIBUTING.md` for branch and review workflow
 
 ## Project Overview
@@ -116,6 +117,6 @@ Do not rewrite or replace these casually unless the task is explicitly about upd
 ## Known Product Limits
 
 - Generated apps are still Java/XML-first
-- No general third-party dependency resolution pipeline yet
+- Third-party libraries come from a curated, always-on catalog (`BundledLibraries.ALL`) precompiled at VibeApp build time; there is no on-device Maven resolution and no arbitrary coordinates
 - Single-project workspace/build flow is the primary path
 - Prompts and templates intentionally stay conservative to maximize device-side build success
