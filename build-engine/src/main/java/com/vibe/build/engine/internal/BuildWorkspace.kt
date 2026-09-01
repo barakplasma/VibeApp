@@ -39,7 +39,7 @@ data class BuildWorkspace(
     fun additionalDexFiles(): List<File> {
         return binDir.listFiles { file ->
             file.isFile && file.name.endsWith(".dex") && file.name != "classes.dex"
-        }?.sortedBy { it.name }.orEmpty()
+        }?.sortedWith(compareBy({ dexOrdinal(it.name) }, { it.name })).orEmpty()
     }
 
     companion object {
@@ -101,6 +101,17 @@ data class BuildWorkspace(
                 ),
             )
         }
+
+        /**
+         * Ordinal of a secondary dex file: `classes2.dex` -> 2, `classes10.dex` -> 10.
+         *
+         * Sorting these by name puts `classes10.dex` before `classes2.dex`, and
+         * [com.vibe.build.engine.apk.AndroidApkBuilder] renames by position, which
+         * would silently reorder dex contents once a build produces ten or more of
+         * them. Unparseable names sort last rather than throwing.
+         */
+        internal fun dexOrdinal(name: String): Int =
+            name.removePrefix("classes").removeSuffix(".dex").toIntOrNull() ?: Int.MAX_VALUE
 
         private fun collectFiles(root: File, extension: String): List<File> {
             if (!root.exists()) {
