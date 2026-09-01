@@ -8,6 +8,9 @@
     <uses-sdk android:minSdkVersion="${minSdkVersion}" android:targetSdkVersion="${targetSdkVersion}"/>
 
     <uses-permission android:name="android.permission.INTERNET"/>
+    <!-- Declared by the bundled androidx.biometric library; harmless when unused. -->
+    <uses-permission android:name="android.permission.USE_BIOMETRIC"/>
+    <uses-permission android:name="android.permission.USE_FINGERPRINT"/>
 
     <application
         android:name=".CrashHandlerApp"

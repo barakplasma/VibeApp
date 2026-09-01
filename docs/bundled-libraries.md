@@ -19,6 +19,8 @@ generated APK. There is no per-project opt-in.
 | `shadow-runtime` | `ShadowActivity` and friends, for plugin mode | `shadow-runtime.jar` |
 | `jsoup` | HTTP + HTML parsing | `jsoup.jar.zip` |
 | `retrofit` | Retrofit + Moshi + OkHttp + Okio | `retrofit.jar.zip` |
+| `exifinterface` | AndroidX ExifInterface (image orientation) | `exifinterface.jar.zip` |
+| `jetpack-ui` | AndroidX Preference + Biometric | `jetpack-ui.jar.zip`, `jetpack-ui-res-compiled.zip` |
 
 Not yet bundled, but designed for: Jetpack additions (CameraX, preference, exifinterface,
 biometric) and ML Kit text recognition / barcode scanning. Both are AAR bundles, which need
@@ -132,6 +134,29 @@ SQLite's JSON1 functions (`json_extract`), which are available at `minSdk = 29`.
 - **ML Kit GenAI** — requires AICore / Gemini Nano (Pixel 8/9- and Galaxy S24/S25-class,
   Android 14/15+), APIs are alpha/beta, and it has no tool-calling API so it cannot back
   VibeApp's own agent loop either.
+
+## The cost of `--extra-packages`
+
+AAPT2 generates a **complete copy** of the resource table as `R.java` for every package in
+`--extra-packages`, not just that package's own resources. Measured on the current catalog:
+17 R.java files, ~2 MB of Java source each, ~33 MB total.
+
+That matters because `JavacCompiler` compiles R.java in batches of three with `System.gc()`
+between them, against a device heap of roughly 192 MB. Every package added to a bundle's
+`extraPackages` costs another ~2 MB of generated source to compile on device. A bundle that
+adds six packages (ML Kit and play-services would) adds ~12 MB.
+
+Verify a new resource bundle links before shipping it — the failure otherwise only appears
+on a phone. The device pipeline can be simulated with the desktop AAPT2:
+
+```sh
+aapt2 link -I $ANDROID_HOME/platforms/android-36/android.jar \
+  --manifest <template manifest> --java gen --custom-package com.vibe.generated.p1 \
+  -o /dev/null --allow-reserved-package-id --auto-add-overlay \
+  --min-sdk-version 29 --target-sdk-version 36 \
+  --extra-packages <colon-separated packages> \
+  $(for f in <all .flat files>; do echo -n " -R $f"; done)
+```
 
 ## Locales and RTL
 

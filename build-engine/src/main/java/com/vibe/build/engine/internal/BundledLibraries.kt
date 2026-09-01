@@ -96,6 +96,20 @@ object BundledLibraries {
             id = "retrofit",
             classesAsset = "retrofit.jar.zip",
         ),
+        // AndroidX ExifInterface: image orientation, needed to display or process
+        // photos the right way up. Ships no resources, so no overlay asset.
+        BundledLibrary(
+            id = "exifinterface",
+            classesAsset = "exifinterface.jar.zip",
+        ),
+        // Preference (settings screens) and Biometric (fingerprint/face unlock). Both
+        // ship resources, so they need the overlay asset and an R class per package.
+        BundledLibrary(
+            id = "jetpack-ui",
+            classesAsset = "jetpack-ui.jar.zip",
+            resCompiledAsset = "jetpack-ui-res-compiled.zip",
+            extraPackages = listOf("androidx.preference", "androidx.biometric"),
+        ),
     )
 
     /**

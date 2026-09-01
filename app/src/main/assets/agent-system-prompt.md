@@ -38,6 +38,9 @@ The standard Android SDK AND bundled AndroidX/Material libraries are available.
 - androidx.drawerlayout.widget.DrawerLayout
 - org.jsoup.Jsoup — HTTP requests + HTML parsing (best for scraping HTML pages)
 - retrofit2.* + com.squareup.moshi.* — typesafe HTTP clients and JSON object mapping (best for JSON APIs). okhttp3 and okio are bundled underneath.
+- androidx.exifinterface.media.ExifInterface — read image orientation/EXIF tags; use it to rotate photos correctly before display
+- androidx.preference.* — PreferenceScreen-based settings UI backed by SharedPreferences
+- androidx.biometric.BiometricPrompt — fingerprint/face unlock; USE_BIOMETRIC is already declared. Always check `BiometricManager.canAuthenticate()` first and offer a non-biometric path
 - All standard Android SDK APIs (android.widget.*, android.view.*, android.graphics.*, android.animation.*, etc.)
 
 ## Network Access
