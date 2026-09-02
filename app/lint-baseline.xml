@@ -1092,17 +1092,6 @@
 
     <issue
         id="MissingTranslation"
-        message="&quot;api_url_cautions&quot; is not translated in &quot;de&quot; (German), &quot;fr&quot; (French), &quot;fa&quot; (Persian)"
-        errorLine1="    &lt;string name=&quot;api_url_cautions&quot;>The url must end with a \&apos;/\&apos;.&lt;/string>"
-        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values/strings.xml"
-            line="82"
-            column="13"/>
-    </issue>
-
-    <issue
-        id="MissingTranslation"
         message="&quot;bug_report&quot; is not translated in &quot;de&quot; (German), &quot;fr&quot; (French), &quot;fa&quot; (Persian)"
         errorLine1="    &lt;string name=&quot;bug_report&quot;>Bug Report&lt;/string>"
         errorLine2="            ~~~~~~~~~~~~~~~~~">
@@ -2913,45 +2902,3 @@
             column="24"/>
     </issue>
 
-    <issue
-        id="MissingTranslation"
-        message="&quot;api_url_cautions&quot; is not translated in &quot;de&quot; (German), &quot;ars&quot;, &quot;ru&quot; (Russian), &quot;ko&quot; (Korean), &quot;pt&quot; (Portuguese), &quot;in&quot; (Indonesian), &quot;fr&quot; (French), &quot;ta&quot; (Tamil), &quot;es&quot; (Spanish), &quot;iw&quot; (Hebrew), &quot;zh&quot; (Chinese), &quot;ar&quot; (Arabic), &quot;ja&quot; (Japanese), &quot;fa&quot; (Persian), &quot;pl&quot; (Polish), &quot;tr&quot; (Turkish)"
-        errorLine1="    &lt;string name=&quot;api_url_cautions&quot;>Enter a provider base URL or the complete chat completions endpoint URL.&lt;/string>"
-        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values/strings.xml"
-            line="82"
-            column="13"/>
-    </issue>
-    <issue
-        id="MissingTranslation"
-        message="&quot;openrouter_description&quot; is not translated in &quot;de&quot; (German), &quot;ars&quot;, &quot;ru&quot; (Russian), &quot;ko&quot; (Korean), &quot;pt&quot; (Portuguese), &quot;in&quot; (Indonesian), &quot;fr&quot; (French), &quot;ta&quot; (Tamil), &quot;es&quot; (Spanish), &quot;iw&quot; (Hebrew), &quot;zh&quot; (Chinese), &quot;ar&quot; (Arabic), &quot;ja&quot; (Japanese), &quot;fa&quot; (Persian), &quot;pl&quot; (Polish), &quot;tr&quot; (Turkish)"
-        errorLine1="    &lt;string name=&quot;openrouter_description&quot;>Access models from multiple providers through OpenRouter.&lt;/string>"
-        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values/strings.xml"
-            line="181"
-            column="13"/>
-    </issue>
-    <issue
-        id="MissingTranslation"
-        message="&quot;openai_compatible&quot; is not translated in &quot;de&quot; (German), &quot;ars&quot;, &quot;ru&quot; (Russian), &quot;ko&quot; (Korean), &quot;pt&quot; (Portuguese), &quot;in&quot; (Indonesian), &quot;fr&quot; (French), &quot;ta&quot; (Tamil), &quot;es&quot; (Spanish), &quot;iw&quot; (Hebrew), &quot;zh&quot; (Chinese), &quot;ar&quot; (Arabic), &quot;ja&quot; (Japanese), &quot;fa&quot; (Persian), &quot;pl&quot; (Polish), &quot;tr&quot; (Turkish)"
-        errorLine1="    &lt;string name=&quot;openai_compatible&quot;>OpenAI Compatible&lt;/string>"
-        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values/strings.xml"
-            line="182"
-            column="13"/>
-    </issue>
-    <issue
-        id="MissingTranslation"
-        message="&quot;openai_compatible_description&quot; is not translated in &quot;de&quot; (German), &quot;ars&quot;, &quot;ru&quot; (Russian), &quot;ko&quot; (Korean), &quot;pt&quot; (Portuguese), &quot;in&quot; (Indonesian), &quot;fr&quot; (French), &quot;ta&quot; (Tamil), &quot;es&quot; (Spanish), &quot;iw&quot; (Hebrew), &quot;zh&quot; (Chinese), &quot;ar&quot; (Arabic), &quot;ja&quot; (Japanese), &quot;fa&quot; (Persian), &quot;pl&quot; (Polish), &quot;tr&quot; (Turkish)"
-        errorLine1="    &lt;string name=&quot;openai_compatible_description&quot;>Connect to an OpenAI-compatible chat completions endpoint using its complete URL.&lt;/string>"
-        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values/strings.xml"
-            line="183"
-            column="13"/>
-    </issue>
-
-</issues>

@@ -113,4 +113,8 @@
     <string name="tool_name_update_plan_step">திட்டத்தைப் புதுப்பி</string>
     <string name="plan_header">திட்டம் (%1$d/%2$d நிறைவடைந்தது)</string>
     <string name="deepseek_description">DeepSeek உருவாக்கியவர், மேம்பட்ட பகுத்தறிவு மாதிரிகள்.</string>
+    <string name="api_url_cautions">வழங்குநரின் அடிப்படை URL அல்லது அரட்டை நிறைவு இறுதிப்புள்ளியின் முழு URL ஐ உள்ளிடவும்.</string>
+    <string name="openrouter_description">OpenRouter மூலம் பல வழங்குநர்களின் மாதிரிகளை அணுகவும்.</string>
+    <string name="openai_compatible">OpenAI இணக்கமானது</string>
+    <string name="openai_compatible_description">முழு URL ஐப் பயன்படுத்தி OpenAI இணக்கமான அரட்டை நிறைவு இறுதிப்புள்ளியுடன் இணைக்கவும்.</string>
 </resources>

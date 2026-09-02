@@ -116,4 +116,8 @@
     <string name="tool_name_update_plan_step">계획 업데이트</string>
     <string name="plan_header">계획 (%1$d/%2$d 완료)</string>
     <string name="deepseek_description">DeepSeek 개발사, 고급 추론 모델.</string>
+    <string name="api_url_cautions">제공업체의 기본 URL 또는 채팅 완성 엔드포인트의 전체 URL을 입력하세요.</string>
+    <string name="openrouter_description">OpenRouter를 통해 여러 제공업체의 모델을 사용합니다.</string>
+    <string name="openai_compatible">OpenAI 호환</string>
+    <string name="openai_compatible_description">전체 URL을 사용하여 OpenAI 호환 채팅 완성 엔드포인트에 연결합니다.</string>
 </resources>

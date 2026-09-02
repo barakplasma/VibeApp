@@ -131,4 +131,8 @@
     <string name="tool_name_update_project_intent">Proje notunu güncelle</string>
     <string name="plan_header">Plan (%1$d/%2$d tamamlandı)</string>
     <string name="deepseek_description">DeepSeek\'in yaratıcısı, gelişmiş akıl yürütme modelleri.</string>
+    <string name="api_url_cautions">Sağlayıcının temel URL\'sini veya sohbet tamamlama uç noktasının tam URL\'sini girin.</string>
+    <string name="openrouter_description">OpenRouter üzerinden birden fazla sağlayıcının modellerine erişin.</string>
+    <string name="openai_compatible">OpenAI Uyumlu</string>
+    <string name="openai_compatible_description">Tam URL\'sini kullanarak OpenAI uyumlu bir sohbet tamamlama uç noktasına bağlanın.</string>
 </resources>

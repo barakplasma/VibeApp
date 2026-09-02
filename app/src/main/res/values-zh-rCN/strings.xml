@@ -246,4 +246,8 @@
     <string name="diagnostic_log_size">日志大小</string>
     <string name="diagnostic_events">事件</string>
     <string name="diagnostic_event_copied">事件已复制到剪贴板</string>
+    <string name="api_url_cautions">请输入服务商的基础 URL，或完整的 chat completions 端点 URL。</string>
+    <string name="openrouter_description">通过 OpenRouter 使用多个服务商的模型。</string>
+    <string name="openai_compatible">OpenAI 兼容</string>
+    <string name="openai_compatible_description">使用完整 URL 连接到兼容 OpenAI 的 chat completions 端点。</string>
 </resources>
