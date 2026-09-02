@@ -51,6 +51,12 @@ tasks.register("generateBundledLibraryAssets") {
             val aars: List<String> = emptyList(),
             /** Asset for AAPT2-precompiled resources; omit for libraries without res/. */
             val resAssetName: String? = null,
+            /**
+             * android:name values for manifest components that have been hand-merged into
+             * the project template. Anything an AAR declares that is not listed here fails
+             * the build, so a library version that adds a component cannot slip through.
+             */
+            val handledComponents: List<String> = emptyList(),
         )
 
         val bundles = listOf(
@@ -82,6 +88,45 @@ tasks.register("generateBundledLibraryAssets") {
                     "androidx.biometric:biometric:1.1.0",
                 ),
                 resAssetName = "jetpack-ui-res-compiled.zip",
+            ),
+            // ML Kit barcode scanning and text recognition, unbundled: the models and
+            // inference engine come from Google Play Services, so this is ~2.8 MB of
+            // client code rather than the ~19 MB the bundled variants would cost. It does
+            // mean generated apps need GMS on the device and must check availability.
+            Bundle(
+                id = "mlkit",
+                assetName = "mlkit.jar.zip",
+                jars = listOf("com.google.firebase:firebase-encoders:16.1.0@jar"),
+                aars = listOf(
+                    "com.google.android.gms:play-services-mlkit-barcode-scanning:18.3.1",
+                    "com.google.android.gms:play-services-mlkit-text-recognition:19.0.1",
+                    "com.google.android.gms:play-services-mlkit-text-recognition-common:19.1.0",
+                    "com.google.android.gms:play-services-base:18.5.0",
+                    "com.google.android.gms:play-services-basement:18.4.0",
+                    "com.google.android.gms:play-services-tasks:18.2.0",
+                    "com.google.android.odml:image:1.0.0-beta1",
+                    "com.google.mlkit:common:18.11.0",
+                    "com.google.mlkit:vision-common:17.3.0",
+                    "com.google.mlkit:vision-interfaces:16.3.0",
+                    "com.google.mlkit:barcode-scanning-common:17.0.0",
+                    "com.google.firebase:firebase-components:16.1.0",
+                    "com.google.firebase:firebase-encoders-json:17.1.0",
+                    "com.google.android.datatransport:transport-api:2.2.1",
+                    "com.google.android.datatransport:transport-backend-cct:2.3.3",
+                    "com.google.android.datatransport:transport-runtime:2.2.6",
+                ),
+                resAssetName = "mlkit-res-compiled.zip",
+                // Hand-merged into the template manifest. MlKitComponentDiscoveryService is
+                // declared by four of these AARs with a different registrar each; AGP unions
+                // the meta-data children and so does the template.
+                handledComponents = listOf(
+                    "com.google.mlkit.common.internal.MlKitInitProvider",
+                    "com.google.mlkit.common.internal.MlKitComponentDiscoveryService",
+                    "com.google.android.gms.common.api.GoogleApiActivity",
+                    "com.google.android.datatransport.runtime.backends.TransportBackendDiscovery",
+                    "com.google.android.datatransport.runtime.scheduling.jobscheduling.JobInfoSchedulerService",
+                    "com.google.android.datatransport.runtime.scheduling.jobscheduling.AlarmManagerSchedulerBroadcastReceiver",
+                ),
             ),
         )
 
@@ -180,15 +225,17 @@ tasks.register("generateBundledLibraryAssets") {
 
         // Manifest nodes an AAR may declare without needing a merge into the app template.
         // Anything else must be hand-merged there first, so fail loudly instead.
-        fun assertManifestIsBenign(id: String, manifest: java.io.File) {
+        fun assertManifestIsBenign(id: String, manifest: java.io.File, handled: List<String>) {
             if (!manifest.exists()) return
-            val text = manifest.readText()
-            val nodes = Regex("<(provider|service|receiver|activity|activity-alias)\\b")
+            val text = manifest.readText().replace(Regex("\\s+"), " ")
+            val declared = Regex("<(?:provider|service|receiver|activity)\\b[^>]*android:name=\"([^\"]+)\"")
                 .findAll(text).map { it.groupValues[1] }.toSet()
-            require(nodes.isEmpty()) {
-                "AAR in bundle '$id' declares $nodes in its manifest. The build engine does no " +
-                    "manifest merging, so these must be hand-merged into the project template " +
-                    "(app/src/main/assets/templates/EmptyActivity/.../AndroidManifest.xml) first."
+            val unhandled = declared - handled.toSet()
+            require(unhandled.isEmpty()) {
+                "AAR in bundle '$id' declares manifest components not hand-merged into the " +
+                    "project template: $unhandled. The build engine does no manifest merging, so " +
+                    "add them to app/src/main/assets/templates/EmptyActivity/.../AndroidManifest.xml " +
+                    "and list them in the bundle's handledComponents."
             }
             val permissions = Regex("""<uses-permission[^>]*android:name="([^"]+)"""")
                 .findAll(text).map { it.groupValues[1] }.toList()
@@ -326,7 +373,7 @@ tasks.register("generateBundledLibraryAssets") {
                 val classes = java.io.File(exploded, "classes.jar")
                 require(classes.exists()) { "AAR ${aar.name} in bundle '${bundle.id}' has no classes.jar" }
                 jars += classes
-                assertManifestIsBenign(bundle.id, java.io.File(exploded, "AndroidManifest.xml"))
+                assertManifestIsBenign(bundle.id, java.io.File(exploded, "AndroidManifest.xml"), bundle.handledComponents)
                 java.io.File(exploded, "res").takeIf { it.isDirectory }?.let { resDirs += it }
             }
 

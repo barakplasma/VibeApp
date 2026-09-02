@@ -41,6 +41,7 @@ The standard Android SDK AND bundled AndroidX/Material libraries are available.
 - androidx.exifinterface.media.ExifInterface — read image orientation/EXIF tags; use it to rotate photos correctly before display
 - androidx.preference.* — PreferenceScreen-based settings UI backed by SharedPreferences
 - androidx.biometric.BiometricPrompt — fingerprint/face unlock; USE_BIOMETRIC is already declared. Always check `BiometricManager.canAuthenticate()` first and offer a non-biometric path
+- com.google.mlkit.vision.* — barcode/QR scanning and text recognition (OCR). See the ML Kit section below; it has hard requirements.
 - All standard Android SDK APIs (android.widget.*, android.view.*, android.graphics.*, android.animation.*, etc.)
 
 ## Network Access
@@ -58,6 +59,25 @@ Pick the right tool:
   `new Retrofit.Builder().baseUrl(...).addConverterFactory(MoshiConverterFactory.create()).build()`.
 - **A one-off JSON fetch** — Jsoup with `.ignoreContentType(true).execute().body()` and
   `org.json.JSONObject` is fine, and avoids defining model classes.
+
+## ML Kit (barcode scanning and OCR)
+
+Available as `com.google.mlkit.vision.barcode.*` and `com.google.mlkit.vision.text.*`.
+Three rules, all of which cause runtime failures if ignored:
+
+- **Requires Google Play Services.** The models run in Play Services, not in the app.
+  ALWAYS check availability first and show a clear message when it is missing:
+  `GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(context)`. Never let
+  the app appear to hang when the scanner is unavailable.
+- **Feed it an image from the gallery**, not a live camera preview:
+  `InputImage.fromFilePath(context, uri)`. There is no CameraX in the bundle, so a live
+  preview means hand-written `camera2` code — avoid it unless the user asks.
+- **Results are asynchronous.** Use `.addOnSuccessListener(...)` / `.addOnFailureListener(...)`
+  with anonymous inner classes (no lambdas).
+
+Text recognition reads **Latin, Chinese, Devanagari, Japanese and Korean only**. There is
+no Hebrew or Arabic model — if the user asks for Hebrew or Arabic OCR, say it is not
+supported rather than shipping an app that silently returns empty results.
 
 ## Storing data
 

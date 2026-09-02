@@ -21,10 +21,11 @@ generated APK. There is no per-project opt-in.
 | `retrofit` | Retrofit + Moshi + OkHttp + Okio | `retrofit.jar.zip` |
 | `exifinterface` | AndroidX ExifInterface (image orientation) | `exifinterface.jar.zip` |
 | `jetpack-ui` | AndroidX Preference + Biometric | `jetpack-ui.jar.zip`, `jetpack-ui-res-compiled.zip` |
+| `mlkit` | ML Kit barcode scanning + text recognition (unbundled, GMS-backed) | `mlkit.jar.zip`, `mlkit-res-compiled.zip` |
 
-Not yet bundled, but designed for: Jetpack additions (CameraX, preference, exifinterface,
-biometric) and ML Kit text recognition / barcode scanning. Both are AAR bundles, which need
-resource precompilation and manifest merging on top of the jar pipeline below.
+Not yet bundled: CameraX, which would give ML Kit a live camera preview instead of
+gallery-only input, and ML Kit translation. CameraX 1.1.0+ needs the Kotlin runtime below;
+translation carries a ~15.6 MB native engine per ABI.
 
 Those bundles are Kotlin-written, so they also need a `kotlin-runtime` bundle
 (`kotlin-stdlib` 2.3.21 + `kotlinx-coroutines` 1.10.1, ~2.9 MB). It is **not** bundled today:
@@ -55,6 +56,12 @@ present. `BuildWorkspace.libraries` carries that list, and the pipeline stages c
 
 A library whose asset is missing is **skipped, not fatal**. That is how a build flavour
 ships a subset of the catalog.
+
+> ⚠️ The `mlkit` bundle is the exception. The project template's manifest declares its
+> components and references `@integer/google_play_services_version`, which resolves only
+> from that bundle's resources. Dropping `mlkit` from the catalog without also removing
+> those manifest nodes fails every generated build at the AAPT2 link step. Remove the two
+> together, or not at all.
 
 ### Adding a library
 
@@ -139,7 +146,7 @@ SQLite's JSON1 functions (`json_extract`), which are available at `minSdk = 29`.
 
 AAPT2 generates a **complete copy** of the resource table as `R.java` for every package in
 `--extra-packages`, not just that package's own resources. Measured on the current catalog:
-17 R.java files, ~2 MB of Java source each, ~33 MB total.
+19 R.java files, ~2 MB of Java source each, ~38 MB total.
 
 That matters because `JavacCompiler` compiles R.java in batches of three with `System.gc()`
 between them, against a device heap of roughly 192 MB. Every package added to a bundle's

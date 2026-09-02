@@ -110,6 +110,16 @@ object BundledLibraries {
             resCompiledAsset = "jetpack-ui-res-compiled.zip",
             extraPackages = listOf("androidx.preference", "androidx.biometric"),
         ),
+        // ML Kit barcode scanning and text recognition, unbundled: models and inference
+        // come from Google Play Services, so generated apps must check availability and
+        // degrade gracefully on a device without GMS. Its manifest components are
+        // hand-merged into the project template.
+        BundledLibrary(
+            id = "mlkit",
+            classesAsset = "mlkit.jar.zip",
+            resCompiledAsset = "mlkit-res-compiled.zip",
+            extraPackages = listOf("com.google.android.gms.base", "com.google.android.gms.common"),
+        ),
     )
 
     /**
