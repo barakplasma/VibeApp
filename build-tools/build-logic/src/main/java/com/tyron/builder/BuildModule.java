@@ -1,22 +1,29 @@
 package com.tyron.builder;
 
 import android.content.Context;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 
 import com.tyron.common.util.Decompress;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.HashMap;
+import java.util.Map;
 
 public class BuildModule {
+
+    private static final String TAG = "BuildModule";
 
     private static Context sApplicationContext;
     private static File sAndroidJar;
     private static File sLambdaStubs;
-    private static File sAndroidxClassesJar;
-    private static File sAndroidxResCompiledDir;
-    private static File sShadowRuntimeJar;
-    private static File sJsoupJar;
+
+    /** Bundled library artifacts already extracted this process, keyed by asset name. */
+    private static final Map<String, File> sBundledArtifacts = new HashMap<>();
 
     public static void initialize(Context applicationContext) {
             sApplicationContext = applicationContext.getApplicationContext();
@@ -56,67 +63,65 @@ public class BuildModule {
         return sLambdaStubs;
     }
 
-    public static File getAndroidxClassesJar() {
-        if (sAndroidxClassesJar == null) {
-            sAndroidxClassesJar = new File(BuildModule.getContext().getFilesDir(), "androidx-classes.jar");
-
-            if (!sAndroidxClassesJar.exists()) {
-                Decompress.unzipFromAssets(BuildModule.getContext(), "androidx-classes.jar.zip", sAndroidxClassesJar.getParentFile().getAbsolutePath());
-            }
-        }
-        return sAndroidxClassesJar;
+    /**
+     * Extracts a bundled library file (typically a jar) from assets into filesDir.
+     *
+     * <p>Assets ending in {@code .zip} are unzipped beside the target; anything else is
+     * copied verbatim. Extraction happens once per process; the returned {@link File} is
+     * not guaranteed to exist, so callers should check before use — a missing asset is
+     * how a build flavor opts out of a library.
+     *
+     * @param assetName name of the asset, e.g. {@code "jsoup.jar.zip"}
+     * @param fileName  resulting file directly under filesDir, e.g. {@code "jsoup.jar"}
+     */
+    public static File getBundledFile(@NonNull String assetName, @NonNull String fileName) {
+        return resolveBundled(assetName, fileName, false);
     }
 
-    public static File getAndroidxResCompiledDir() {
-        if (sAndroidxResCompiledDir == null) {
-            sAndroidxResCompiledDir = new File(BuildModule.getContext().getFilesDir(), "androidx-res-compiled");
-
-            if (!sAndroidxResCompiledDir.exists()) {
-                Decompress.unzipFromAssets(BuildModule.getContext(), "androidx-res-compiled.zip", sAndroidxResCompiledDir.getAbsolutePath());
-            }
-        }
-        return sAndroidxResCompiledDir;
+    /**
+     * As {@link #getBundledFile}, but for zips whose entries make up a directory
+     * (pre-compiled {@code .flat} resources, library assets, native libraries). The
+     * archive is expanded into {@code dirName} rather than beside it.
+     */
+    public static File getBundledDir(@NonNull String assetName, @NonNull String dirName) {
+        return resolveBundled(assetName, dirName, true);
     }
 
-    public static File getShadowRuntimeJar() {
-        if (sShadowRuntimeJar == null) {
-            Context context = BuildModule.getContext();
-            if (context == null) return null;
-            sShadowRuntimeJar = new File(context.getFilesDir(), "shadow-runtime.jar");
-            if (!sShadowRuntimeJar.exists()) {
-                try {
-                    java.io.InputStream is = context.getAssets().open("shadow-runtime.jar");
-                    java.io.FileOutputStream fos = new java.io.FileOutputStream(sShadowRuntimeJar);
-                    byte[] buffer = new byte[8192];
-                    int read;
-                    while ((read = is.read(buffer)) != -1) {
-                        fos.write(buffer, 0, read);
-                    }
-                    fos.close();
-                    is.close();
-                } catch (java.io.IOException e) {
-                    e.printStackTrace();
-                    return null;
-                }
+    private static synchronized File resolveBundled(String assetName, String name, boolean asDirectory) {
+        File cached = sBundledArtifacts.get(assetName);
+        if (cached != null) {
+            return cached;
+        }
+        Context context = getContext();
+        if (context == null) {
+            return null;
+        }
+        File target = new File(context.getFilesDir(), name);
+        if (!target.exists()) {
+            if (assetName.endsWith(".zip")) {
+                String destination = asDirectory
+                        ? target.getAbsolutePath()
+                        : target.getParentFile().getAbsolutePath();
+                Decompress.unzipFromAssets(context, assetName, destination);
+            } else {
+                copyAsset(context, assetName, target);
             }
         }
-        return sShadowRuntimeJar;
+        sBundledArtifacts.put(assetName, target);
+        return target;
     }
 
-    public static File getJsoupJar() {
-        if (sJsoupJar == null) {
-            Context context = BuildModule.getContext();
-            if (context == null) {
-                return null;
+    private static void copyAsset(Context context, String assetName, File target) {
+        try (InputStream input = context.getAssets().open(assetName);
+             FileOutputStream output = new FileOutputStream(target)) {
+            byte[] buffer = new byte[8192];
+            int read;
+            while ((read = input.read(buffer)) != -1) {
+                output.write(buffer, 0, read);
             }
-            sJsoupJar = new File(context.getFilesDir(), "jsoup.jar");
-            if (!sJsoupJar.exists()) {
-                Decompress.unzipFromAssets(BuildModule.getContext(),
-                        "jsoup.jar.zip",
-                        sJsoupJar.getParentFile().getAbsolutePath());
-            }
+        } catch (IOException e) {
+            Log.w(TAG, "Failed to copy bundled asset " + assetName, e);
         }
-        return sJsoupJar;
     }
 
     public static void setAndroidJar(@NonNull File jar) {

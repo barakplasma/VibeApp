@@ -90,16 +90,23 @@ class Aapt2ResourceCompiler(
             "--target-sdk-version",
             input.targetSdk.toString(),
         )
-        // AndroidX pre-compiled resources as overlay (must come before project resources)
-        if (workspace.androidxResCompiledDir != null) {
-            val flatFiles = workspace.androidxResCompiledDir.listFiles { file ->
-                file.isFile && file.name.endsWith(".flat")
-            }
-            flatFiles?.sorted()?.forEach { flat ->
-                linkArgs += listOf("-R", flat.absolutePath)
-            }
-            // Generate R.java for each AndroidX library package so their code can resolve R references
-            linkArgs += listOf("--extra-packages", ANDROIDX_EXTRA_PACKAGES)
+        // Pre-compiled library resources as overlays. These must precede the project's
+        // own resources so the project can override them.
+        workspace.libraries.forEach { library ->
+            library.resCompiledDir
+                ?.listFiles { file -> file.isFile && file.name.endsWith(".flat") }
+                ?.sorted()
+                ?.forEach { flat -> linkArgs += listOf("-R", flat.absolutePath) }
+        }
+        // --extra-packages generates an R class per library package so library code can
+        // resolve its own R.drawable / R.style / R.attr references at runtime.
+        // Only for libraries whose overlays actually loaded: an R class for a package with
+        // no resources is at best useless, and the extraction may have been skipped.
+        val extraPackages = workspace.libraries
+            .filter { it.resCompiledDir != null }
+            .flatMap { it.extraPackages }
+        if (extraPackages.isNotEmpty()) {
+            linkArgs += listOf("--extra-packages", extraPackages.joinToString(":"))
         }
         if (hasProjectResources) {
             linkArgs += listOf("-R", workspace.compiledResZip.absolutePath)
@@ -169,28 +176,5 @@ class Aapt2ResourceCompiler(
         } catch (_: Throwable) {
             "AAPT2 failed"
         }
-    }
-
-    companion object {
-        /**
-         * Colon-separated package names for all bundled AndroidX libraries.
-         * AAPT2 --extra-packages generates R.java for each, so library code
-         * can resolve its own R.drawable / R.style / R.attr references at runtime.
-         */
-        private const val ANDROIDX_EXTRA_PACKAGES =
-            "androidx.appcompat" +
-            ":androidx.appcompat.resources" +
-            ":androidx.cardview" +
-            ":androidx.constraintlayout.widget" +
-            ":androidx.coordinatorlayout" +
-            ":androidx.core" +
-            ":androidx.fragment" +
-            ":androidx.lifecycle.runtime" +
-            ":androidx.lifecycle.viewmodel" +
-            ":androidx.recyclerview" +
-            ":androidx.savedstate" +
-            ":androidx.transition" +
-            ":androidx.viewpager2" +
-            ":com.google.android.material"
     }
 }

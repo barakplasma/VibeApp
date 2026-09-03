@@ -114,4 +114,8 @@
     <string name="tool_name_update_plan_step">עדכון תוכנית</string>
     <string name="plan_header">תוכנית (%1$d/%2$d הושלמו)</string>
     <string name="deepseek_description">יוצר DeepSeek, מודלים מתקדמים להסקת מסקנות.</string>
+    <string name="api_url_cautions">הזינו כתובת URL בסיסית של הספק או את הכתובת המלאה של נקודת הקצה להשלמות צ\'אט.</string>
+    <string name="openrouter_description">גישה למודלים ממספר ספקים דרך OpenRouter.</string>
+    <string name="openai_compatible">תואם OpenAI</string>
+    <string name="openai_compatible_description">התחברות לנקודת קצה להשלמות צ\'אט התואמת ל-OpenAI באמצעות הכתובת המלאה שלה.</string>
 </resources>

@@ -77,4 +77,8 @@
     <string name="tool_name_update_plan_step">Plan aktualisieren</string>
     <string name="plan_header">Plan (%1$d/%2$d abgeschlossen)</string>
     <string name="deepseek_description">Entwickler von DeepSeek, fortschrittlichen Reasoning-Modellen.</string>
+    <string name="api_url_cautions">Geben Sie eine Basis-URL des Anbieters oder die vollständige URL des Chat-Completions-Endpunkts ein.</string>
+    <string name="openrouter_description">Modelle mehrerer Anbieter über OpenRouter nutzen.</string>
+    <string name="openai_compatible">OpenAI-kompatibel</string>
+    <string name="openai_compatible_description">Über die vollständige URL mit einem OpenAI-kompatiblen Chat-Completions-Endpunkt verbinden.</string>
 </resources>

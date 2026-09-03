@@ -253,7 +253,7 @@ AI 生成修复代码
 ## 已知限制
 
 1. **不支持 Kotlin**（Phase 1）— kotlinc 需要额外的编译器集成
-2. **不支持第三方库**（Phase 1）— 需要预编译 DEX 机制
+2. **第三方库限于内置目录** — 见 `docs/bundled-libraries.md`。库在 VibeApp 构建期预编译并随 APK 打包；设备上没有 Maven 解析，也无法使用任意坐标
 3. **不支持 Jetpack Compose**（Phase 1）— 需要 Kotlin 编译器插件
 4. **资源限制** — 复杂项目可能受手机内存限制
 5. **编译速度** — 比 PC 上的 Gradle 构建慢，但对于单 Activity 项目可接受

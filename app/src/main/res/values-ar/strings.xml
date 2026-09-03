@@ -114,4 +114,8 @@
     <string name="tool_name_update_plan_step">تحديث الخطة</string>
     <string name="plan_header">الخطة (%1$d/%2$d مكتملة)</string>
     <string name="deepseek_description">مبتكر DeepSeek، نماذج استدلال متقدمة.</string>
+    <string name="api_url_cautions">أدخل عنوان URL الأساسي للمزوّد أو عنوان URL الكامل لنقطة نهاية إكمال المحادثة.</string>
+    <string name="openrouter_description">الوصول إلى نماذج من عدة مزوّدين عبر OpenRouter.</string>
+    <string name="openai_compatible">متوافق مع OpenAI</string>
+    <string name="openai_compatible_description">الاتصال بنقطة نهاية إكمال محادثة متوافقة مع OpenAI باستخدام عنوان URL الكامل الخاص بها.</string>
 </resources>

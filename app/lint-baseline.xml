@@ -1092,17 +1092,6 @@
 
     <issue
         id="MissingTranslation"
-        message="&quot;api_url_cautions&quot; is not translated in &quot;de&quot; (German), &quot;fr&quot; (French), &quot;fa&quot; (Persian)"
-        errorLine1="    &lt;string name=&quot;api_url_cautions&quot;>The url must end with a \&apos;/\&apos;.&lt;/string>"
-        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values/strings.xml"
-            line="82"
-            column="13"/>
-    </issue>
-
-    <issue
-        id="MissingTranslation"
         message="&quot;bug_report&quot; is not translated in &quot;de&quot; (German), &quot;fr&quot; (French), &quot;fa&quot; (Persian)"
         errorLine1="    &lt;string name=&quot;bug_report&quot;>Bug Report&lt;/string>"
         errorLine2="            ~~~~~~~~~~~~~~~~~">
@@ -2913,4 +2902,3 @@
             column="24"/>
     </issue>
 
-</issues>

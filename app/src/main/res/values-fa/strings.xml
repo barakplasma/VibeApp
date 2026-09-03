@@ -39,4 +39,8 @@
     <string name="tool_name_update_plan_step">به‌روزرسانی برنامه</string>
     <string name="plan_header">برنامه (%1$d/%2$d تکمیل شده)</string>
     <string name="deepseek_description">سازنده DeepSeek، مدل‌های استدلال پیشرفته.</string>
+    <string name="api_url_cautions">نشانی پایه ارائه‌دهنده یا نشانی کامل نقطه پایانی تکمیل گفتگو را وارد کنید.</string>
+    <string name="openrouter_description">دسترسی به مدل‌های چند ارائه‌دهنده از طریق OpenRouter.</string>
+    <string name="openai_compatible">سازگار با OpenAI</string>
+    <string name="openai_compatible_description">اتصال به یک نقطه پایانی تکمیل گفتگوی سازگار با OpenAI با استفاده از نشانی کامل آن.</string>
 </resources>

@@ -25,11 +25,13 @@ data class BuildWorkspace(
     val signedApk: File,
     val bootstrapJar: File,
     val lambdaStubsJar: File,
-    val androidxClassesJar: File?,
-    val androidxResCompiledDir: File?,
-    val shadowRuntimeJar: File?,
-    val jsoupJar: File?,
+    /** Bundled libraries present on this build flavor, in [BundledLibraries.ALL] order. */
+    val libraries: List<ResolvedLibrary>,
 ) {
+
+    /** Classpath entries contributed by [libraries]. */
+    fun libraryJars(): List<File> = libraries.map { it.jar }
+
     fun allJavaSources(): List<File> {
         return collectFiles(sourceDir, ".java") + collectFiles(generatedSourcesDir, ".java")
     }
@@ -39,7 +41,7 @@ data class BuildWorkspace(
     fun additionalDexFiles(): List<File> {
         return binDir.listFiles { file ->
             file.isFile && file.name.endsWith(".dex") && file.name != "classes.dex"
-        }?.sortedBy { it.name }.orEmpty()
+        }?.sortedWith(compareBy({ dexOrdinal(it.name) }, { it.name })).orEmpty()
     }
 
     companion object {
@@ -61,11 +63,6 @@ data class BuildWorkspace(
             val unsignedApk = File(binDir, "generated.apk")
             val signedApk = File(binDir, "signed.apk")
 
-            // shadow-runtime.jar is always on classpath — generated apps extend
-            // ShadowActivity which delegates to Activity in standalone mode.
-            val shadowRuntimeJar = BuildModule.getShadowRuntimeJar()?.takeIf { it.exists() }
-            val jsoupJar = BuildModule.getJsoupJar()?.takeIf { it.exists() }
-
             return BuildWorkspace(
                 rootDir = rootDir,
                 sourceDir = sourceDir,
@@ -85,10 +82,7 @@ data class BuildWorkspace(
                 signedApk = signedApk,
                 bootstrapJar = BuildModule.getAndroidJar(),
                 lambdaStubsJar = BuildModule.getLambdaStubs(),
-                androidxClassesJar = BuildModule.getAndroidxClassesJar()?.takeIf { it.exists() },
-                androidxResCompiledDir = BuildModule.getAndroidxResCompiledDir()?.takeIf { it.exists() && it.isDirectory },
-                shadowRuntimeJar = shadowRuntimeJar,
-                jsoupJar = jsoupJar,
+                libraries = BundledLibraries.resolve(),
             )
         }
 
@@ -101,6 +95,17 @@ data class BuildWorkspace(
                 ),
             )
         }
+
+        /**
+         * Ordinal of a secondary dex file: `classes2.dex` -> 2, `classes10.dex` -> 10.
+         *
+         * Sorting these by name puts `classes10.dex` before `classes2.dex`, and
+         * [com.vibe.build.engine.apk.AndroidApkBuilder] renames by position, which
+         * would silently reorder dex contents once a build produces ten or more of
+         * them. Unparseable names sort last rather than throwing.
+         */
+        internal fun dexOrdinal(name: String): Int =
+            name.removePrefix("classes").removeSuffix(".dex").toIntOrNull() ?: Int.MAX_VALUE
 
         private fun collectFiles(root: File, extension: String): List<File> {
             if (!root.exists()) {

@@ -114,4 +114,8 @@
     <string name="tool_name_update_plan_step">Обновить план</string>
     <string name="plan_header">План (%1$d/%2$d выполнено)</string>
     <string name="deepseek_description">Создатель DeepSeek, продвинутых моделей рассуждения.</string>
+    <string name="api_url_cautions">Введите базовый URL провайдера или полный URL эндпоинта chat completions.</string>
+    <string name="openrouter_description">Доступ к моделям разных провайдеров через OpenRouter.</string>
+    <string name="openai_compatible">Совместимо с OpenAI</string>
+    <string name="openai_compatible_description">Подключение к совместимому с OpenAI эндпоинту chat completions по его полному URL.</string>
 </resources>

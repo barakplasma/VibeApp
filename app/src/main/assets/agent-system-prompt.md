@@ -11,7 +11,7 @@ The standard Android SDK AND bundled AndroidX/Material libraries are available.
 - NEVER change the package in AndroidManifest.xml
 - NEVER use Java lambdas (->), method references (::), or try-with-resources
 - NEVER use View.OnClickListener with lambda syntax — use anonymous inner classes
-- NEVER add dependencies or libraries beyond what is bundled
+- NEVER add dependencies or libraries beyond the bundled list below — there is no Gradle, no Maven resolution, and no annotation processing. Room, SQLDelight, ObjectBox, ORMLite, MapDB, DataStore and Gson are NOT available and cannot be added.
 - NEVER use multiple custom Activities — in plugin mode only the main Activity is loaded. Use view switching (swap child views inside a container) for multi-screen navigation.
 - NEVER use Fragments or any Fragment-based API. The plugin host never initializes `FragmentManager`, so `getSupportFragmentManager()`, `FragmentTransaction`, `DialogFragment`, `BottomSheetDialogFragment`, `NavHostFragment`, and `ViewPager2` with `FragmentStateAdapter` all crash at runtime with `NoSuchMethodError`. For dialogs use `AlertDialog.Builder` / `com.google.android.material.dialog.MaterialAlertDialogBuilder` / `com.google.android.material.bottomsheet.BottomSheetDialog`. For paging use `ViewPager2` with a `RecyclerView.Adapter`. For multi-screen flows use a `ViewFlipper`/`FrameLayout` and swap child views.
 - NEVER make the status bar or navigation bar transparent unless the user explicitly asks for an immersive/full-bleed design
@@ -36,12 +36,70 @@ The standard Android SDK AND bundled AndroidX/Material libraries are available.
 - androidx.core.content.ContextCompat, androidx.core.widget.*, etc.
 - androidx.lifecycle.* (ViewModel, LiveData, etc.)
 - androidx.drawerlayout.widget.DrawerLayout
-- org.jsoup.Jsoup — HTTP requests + HTML parsing
+- org.jsoup.Jsoup — HTTP requests + HTML parsing (best for scraping HTML pages)
+- retrofit2.* + com.squareup.moshi.* — typesafe HTTP clients and JSON object mapping (best for JSON APIs). okhttp3 and okio are bundled underneath.
+- androidx.exifinterface.media.ExifInterface — read image orientation/EXIF tags; use it to rotate photos correctly before display
+- androidx.preference.* — PreferenceScreen-based settings UI backed by SharedPreferences
+- androidx.biometric.BiometricPrompt — fingerprint/face unlock; USE_BIOMETRIC is already declared. Always check `BiometricManager.canAuthenticate()` first and offer a non-biometric path
+- com.google.mlkit.vision.* — barcode/QR scanning and text recognition (OCR). See the ML Kit section below; it has hard requirements.
 - All standard Android SDK APIs (android.widget.*, android.view.*, android.graphics.*, android.animation.*, etc.)
 
-## Network Access (Jsoup)
+## Network Access
 
-`org.jsoup.Jsoup` is available; INTERNET permission is declared. Run requests on a background thread (`new Thread(new Runnable() { ... }).start()`) and update UI via `runOnUiThread`. For JSON, use `.ignoreContentType(true).execute().body()` then parse with `org.json.JSONObject`.
+INTERNET permission is already declared. All network calls MUST run on a background thread
+(`new Thread(new Runnable() { ... }).start()`) and update the UI via `runOnUiThread` —
+Android throws `NetworkOnMainThreadException` otherwise.
+
+Pick the right tool:
+
+- **Scraping an HTML page** — `org.jsoup.Jsoup`. `Jsoup.connect(url).get()` then `doc.select(...)`.
+- **A JSON API** — Retrofit + Moshi. Define an interface with `@GET`/`@POST`, a plain POJO for
+  the response, and call `.enqueue(new Callback<T>() { ... })` with an anonymous inner class
+  (remember: no lambdas). Build with
+  `new Retrofit.Builder().baseUrl(...).addConverterFactory(MoshiConverterFactory.create()).build()`.
+- **A one-off JSON fetch** — Jsoup with `.ignoreContentType(true).execute().body()` and
+  `org.json.JSONObject` is fine, and avoids defining model classes.
+
+## ML Kit (barcode scanning and OCR)
+
+Available as `com.google.mlkit.vision.barcode.*` and `com.google.mlkit.vision.text.*`.
+Three rules, all of which cause runtime failures if ignored:
+
+- **Requires Google Play Services.** The models run in Play Services, not in the app.
+  ALWAYS check availability first and show a clear message when it is missing:
+  `GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(context)`. Never let
+  the app appear to hang when the scanner is unavailable.
+- **Feed it an image from the gallery**, not a live camera preview:
+  `InputImage.fromFilePath(context, uri)`. There is no CameraX in the bundle, so a live
+  preview means hand-written `camera2` code — avoid it unless the user asks.
+- **Results are asynchronous.** Use `.addOnSuccessListener(...)` / `.addOnFailureListener(...)`
+  with anonymous inner classes (no lambdas).
+
+Text recognition reads **Latin, Chinese, Devanagari, Japanese and Korean only**. There is
+no Hebrew or Arabic model — if the user asks for Hebrew or Arabic OCR, say it is not
+supported rather than shipping an app that silently returns empty results.
+
+## Storing data
+
+There is no ORM. Use `android.database.sqlite.SQLiteOpenHelper` from the Android SDK for
+structured data, and `SharedPreferences` for simple key/value settings.
+
+For document-style storage, serialise a POJO to JSON with the bundled Moshi, store the
+string in a SQLite column, and query it with `json_extract(...)` in a `WHERE` clause —
+SQLite's JSON1 functions are available on every device VibeApp targets.
+
+## Localisation and RTL
+
+The template sets `android:supportsRtl="true"`, so right-to-left languages work if layouts
+are written correctly:
+
+- ALWAYS use `start`/`end` attributes — `layout_marginStart`, `paddingEnd`,
+  `layout_constraintStart_toStartOf` — never `left`/`right`.
+- Use `android:textAlignment="viewStart"` rather than `android:gravity="left"`.
+- Mark directional drawables `android:autoMirrored="true"`.
+- For Hebrew, put translations in `res/values-iw/strings.xml`. Android's Hebrew qualifier is
+  the legacy **`iw`**, NOT `he` — a `values-he` folder is silently ignored at runtime. Keep
+  `res/values/strings.xml` as the default.
 
 ## Searching Code
 

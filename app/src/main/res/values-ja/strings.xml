@@ -114,4 +114,8 @@
     <string name="tool_name_update_plan_step">プランを更新</string>
     <string name="plan_header">プラン (%1$d/%2$d 完了)</string>
     <string name="deepseek_description">DeepSeekの開発元、高度な推論モデル。</string>
+    <string name="api_url_cautions">プロバイダーのベース URL、またはチャット補完エンドポイントの完全な URL を入力してください。</string>
+    <string name="openrouter_description">OpenRouter を通じて複数のプロバイダーのモデルを利用できます。</string>
+    <string name="openai_compatible">OpenAI 互換</string>
+    <string name="openai_compatible_description">完全な URL を使用して、OpenAI 互換のチャット補完エンドポイントに接続します。</string>
 </resources>
