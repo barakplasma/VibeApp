@@ -39,7 +39,21 @@ jobs:
         env:
           APP_KEYSTORE: ${{ secrets.APP_KEYSTORE }}
         run: |
+          if [ -z "$APP_KEYSTORE" ]; then
+            echo "::error::The APP_KEYSTORE repository secret is not set (or is empty)." \
+                 "Add a base64-encoded PKCS12/JKS keystore as the APP_KEYSTORE secret" \
+                 "(Settings > Secrets and variables > Actions) before running this workflow." >&2
+            exit 1
+          fi
+
           echo "$APP_KEYSTORE" | base64 -d > keystore.jks
+
+          if [ ! -s keystore.jks ]; then
+            echo "::error::Decoded keystore.jks is empty. Check that APP_KEYSTORE contains" \
+                 "valid base64-encoded keystore data." >&2
+            exit 1
+          fi
+
           cp keystore.jks "${{ github.workspace }}/app/build/outputs/apk/release/keystore.jks"
           cp keystore.jks "${{ github.workspace }}/app/build/outputs/bundle/release/keystore.jks"
 
